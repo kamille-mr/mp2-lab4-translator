@@ -60,10 +60,22 @@ TEST(Translator, can_add) {
 	ASSERT_EQ(49.0, t.Calculate());
 }
 
+TEST(Translator, can_add_dot) {
+
+	Translator t("17.5+32.5");
+	ASSERT_EQ(50.0, t.Calculate());
+}
+
 TEST(Translator, can_subtract) {
 
 	Translator t("32-17");
 	ASSERT_EQ(15.0, t.Calculate());
+}
+
+TEST(Translator, can_div_dot) {
+
+	Translator t("17.5-0.5");
+	ASSERT_EQ(17.0, t.Calculate());
 }
 
 TEST(Translator, can_subtract_negative) {

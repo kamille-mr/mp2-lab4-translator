@@ -58,8 +58,11 @@ class Translator {
     }
 
     void ToPostfix() {
+
         Parse();
         std::stack<std::string> st;
+        std::string s;
+        size_t q = 0;
         postfix = "";
         for (auto i : lexems) {
 
@@ -72,6 +75,12 @@ class Translator {
             else if (i == "(") {
 
                 st.push(i);
+            }
+
+            else if (i == ".") {
+
+                postfix.pop_back();
+                postfix = postfix + i;
             }
 
             else if (i == ")") {
@@ -153,23 +162,51 @@ public:
                 st.pop();
                 if (lex == "+") {
 
-                    st.push(left_op + right_op);
+                    if (postfix.size() < 3) {
+
+                        throw "error";
+                    }
+
+                    else {
+
+                        st.push(left_op + right_op);
+                    }
                 }
                 else if (lex == "-") {
 
-                    st.push(left_op - right_op);
+                    if (postfix.size() < 3) {
+
+                        throw "error";
+                    }
+                    else{
+                        
+                        st.push(left_op - right_op);
+                    }
+                    
                 }
                 else if (lex == "*") {
 
-                    st.push(left_op * right_op);
+                    if (postfix.size() < 3) {
+
+                        throw "error";
+                    }
+                    else{
+                        
+                        st.push(left_op * right_op);
+                    }
                 }
                 else if (lex == "/") {
 
-                    st.push(left_op / right_op);
+                    if (postfix.size() < 3) {
+
+                        throw "error";
+                    }
+                    else{
+                        
+                        st.push(left_op / right_op);
+                    }                  
                 }
-
             }
-
         }
         double answer = st.top();
         st.pop();
