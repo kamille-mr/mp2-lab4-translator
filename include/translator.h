@@ -15,7 +15,7 @@ class Translator {
     std::string postfix;
     std::vector<std::string> lexems;
     std::queue<std::string> postfx;
-    std::map<std::string, int> priority{ {"(",0}, {"+",1}, {"-",1}, {"*",2}, {"/",2} };
+    std::map<std::string, int> priority{ {"+",1}, {"-",1}, {"*",2}, {"/",2} };
     void Parse() {
 
         for (int i = 0; i < infix.size(); i++) {
@@ -26,7 +26,7 @@ class Translator {
                 tmp = tmp + infix[i];
                 for (int j = i + 1; j < infix.size(); j++) {
 
-                    if (isdigit(infix[j])) {
+                    if (isdigit(infix[j]) || infix[j] == '.') {
                         tmp = tmp + infix[j];
                         i++;
                     }
@@ -75,12 +75,7 @@ class Translator {
             else if (i == "(") {
 
                 st.push(i);
-            }
 
-            else if (i == ".") {
-
-                postfix.pop_back();
-                postfix = postfix + i;
             }
 
             else if (i == ")") {
@@ -92,6 +87,7 @@ class Translator {
                     st.pop();
                 }
                 st.pop();
+
             }
             else if ((i == "+") || (i == "-") || (i == "*") || (i == "/")) {
 
@@ -148,63 +144,48 @@ public:
         std::string lex;
         while (!postfx.empty()) {
 
-            lex = postfx.front();
-            postfx.pop();
-            if (!IsOperation(lex)) {
+            if (postfix.size() < 3) {
 
-                st.push(stoi(lex));
+                throw "error";
             }
-            else if (priority.find(lex) != priority.end()) {
+            else {
 
-                right_op = st.top();
-                st.pop();
-                left_op = st.top();
-                st.pop();
-                if (lex == "+") {
+                lex = postfx.front();
+                postfx.pop();
+                if (!IsOperation(lex)) {
 
-                    if (postfix.size() < 3) {
+                    st.push(stod(lex));
+                }
+                else if (priority.find(lex) != priority.end()) {
 
-                        throw "error";
-                    }
-
-                    else {
+                    right_op = st.top();
+                    st.pop();
+                    left_op = st.top();
+                    st.pop();
+                    if (lex == "+") {
 
                         st.push(left_op + right_op);
                     }
-                }
-                else if (lex == "-") {
+                    else if (lex == "-") {
 
-                    if (postfix.size() < 3) {
-
-                        throw "error";
-                    }
-                    else{
-                        
                         st.push(left_op - right_op);
-                    }
-                    
-                }
-                else if (lex == "*") {
 
-                    if (postfix.size() < 3) {
-
-                        throw "error";
                     }
-                    else{
-                        
+                    else if (lex == "*") {
+
                         st.push(left_op * right_op);
-                    }
-                }
-                else if (lex == "/") {
 
-                    if (postfix.size() < 3) {
-
-                        throw "error";
                     }
-                    else{
-                        
+                    else if (lex == "/") {
+
+                        if (right_op == 0) {
+
+                            throw "error";
+                        }
+
                         st.push(left_op / right_op);
-                    }                  
+
+                    }
                 }
             }
         }

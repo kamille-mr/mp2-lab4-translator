@@ -1,7 +1,6 @@
 #include "translator.h"
 #include <gtest.h>
 
-
 TEST(Translator, can_create) {
 
 	ASSERT_NO_THROW(Translator t("123"));
@@ -48,12 +47,6 @@ TEST(Translator, test_postfix_form) {
 	ASSERT_EQ("621*+", t.GetPostfix());
 }
 
-TEST(Translator, can_parse_number) {
-
-	Translator t("1");
-	ASSERT_EQ(t.Calculate(), 1);
-}
-
 TEST(Translator, can_add) {
 
 	Translator t("17+32");
@@ -72,7 +65,7 @@ TEST(Translator, can_subtract) {
 	ASSERT_EQ(15.0, t.Calculate());
 }
 
-TEST(Translator, can_div_dot) {
+TEST(Translator, can_subtract_dot) {
 
 	Translator t("17.5-0.5");
 	ASSERT_EQ(17.0, t.Calculate());
@@ -95,4 +88,16 @@ TEST(Translator, can_divide) {
 
 	Translator t("11/2");
 	ASSERT_EQ(5.5, t.Calculate());
+}
+
+TEST(Translator, can_throw_one) {
+
+	Translator t("2*");
+	EXPECT_ANY_THROW(t.Calculate());
+}
+
+TEST(Translator, not_can_div_zero) {
+
+	Translator t("11/0");
+	EXPECT_ANY_THROW(t.Calculate());
 }
