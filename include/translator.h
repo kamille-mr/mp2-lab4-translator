@@ -64,6 +64,7 @@ class Translator {
         std::string s;
         size_t q = 0;
         postfix = "";
+        int br = 0;
         for (auto i : lexems) {
 
             if (!(IsOperation(i))) {
@@ -75,10 +76,17 @@ class Translator {
             else if (i == "(") {
 
                 st.push(i);
+                br++;
 
             }
 
             else if (i == ")") {
+
+                br--;
+
+                if (br < 0) {
+                    throw ("Error");
+                }
 
                 while ((!st.empty()) && (st.top() != "(")) {
 
@@ -110,12 +118,19 @@ class Translator {
                     st.push(i);
                 }
             }
+            else {
+                throw ("Error");
+            }
         }
         while (!st.empty()) {
 
             postfx.push(st.top());
             postfix = postfix + st.top();
             st.pop();
+        }
+
+        if (br != 0) {
+            throw ("Error");
         }
     };
 
@@ -165,6 +180,7 @@ public:
                     if (lex == "+") {
 
                         st.push(left_op + right_op);
+
                     }
                     else if (lex == "-") {
 
@@ -185,6 +201,9 @@ public:
 
                         st.push(left_op / right_op);
 
+                    }
+                    else {
+                        throw ("Error");
                     }
                 }
             }

@@ -101,3 +101,29 @@ TEST(Translator, not_can_div_zero) {
 	Translator t("11/0");
 	EXPECT_ANY_THROW(t.Calculate());
 }
+
+TEST(Translator, can_throw_three) {
+
+	Translator t("1");
+	EXPECT_ANY_THROW(t.Calculate());
+}
+
+TEST(Translator, can_throw_four) {
+
+	EXPECT_ANY_THROW(Translator t("(2*5(3+4)))"));
+}
+
+TEST(Translator, can_throw_five) {
+
+	EXPECT_ANY_THROW(Translator t("((2*5(3+4))"));
+}
+
+TEST(Translator, can_throw_six) {
+
+	EXPECT_ANY_THROW(Translator t("(2*5)(3+4))"));
+}
+
+TEST(Translator, can_throw_seven) {
+
+	EXPECT_ANY_THROW(Translator t("(2*5(3)+4)))"));
+}
